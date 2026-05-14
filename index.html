@@ -1,135 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>🧠 Brainrot Storager</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #3e2723; /* Deep chocolate */
-      color: #ffc0cb; /* Pink text */
-      text-align: center;
-      padding: 50px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glide - Cosmic Spaces</title>
+    <!-- Load 8x8 Jitsi External API -->
+    <script src="https://8x8.vc/vpaas-magic-cookie-bd0b243e316c44ab8f707a64e1271195/external_api.js" async></script>
+    <style>
+        /* Deep cosmic canvas gradient background */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at 50% 50%, #160a2c 0%, #080313 70%, #020005 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    h1 {
-      color: #ffc0cb;
-    }
+        /* Ambient glowing background nebula clouds */
+        .nebula-pink {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    input, button {
-      padding: 12px;
-      margin: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      width: 300px;
-    }
+        .nebula-blue {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    input {
-      background-color: #ffc0cb; /* Pink input */
-      color: #3e2723; /* Chocolate text */
-    }
+        /* Starry background layer texture */
+        .starfield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 2;
+        }
 
-    button {
-      background-color: #8b4513; /* Chocolate button */
-      color: #ffc0cb; /* Pink text */
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
+        /* Glassmorphism Navigation Bar Header */
+        .glide-navbar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: rgba(13, 8, 30, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
 
-    button:hover {
-      transform: scale(1.05);
-    }
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    .status {
-      margin-top: 20px;
-      font-size: 18px;
-      white-space: pre-line;
-    }
-  </style>
+        /* Glowing particle emblem */
+        .brand-orb {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(45deg, #a855f7, #ec4899);
+            border-radius: 50%;
+            box-shadow: 0 0 15px #bf55ec, 0 0 5px #fff;
+            animation: pulse 3s ease-in-out infinite alternate;
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #d8b4fe, #fbcfe8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .space-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #d8b4fe;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #22c55e;
+        }
+
+        /* Video Workspace Wrapper Container */
+        .workspace-main {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Futuristic frame container for Jitsi frame integration */
+        #jaas-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(5, 2, 14, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 
+                0 24px 64px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(168, 85, 247, 0.1);
+        }
+
+        #jaas-container iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 10px #bf55ec; }
+            100% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 20px #ec4899, 0 0 5px #fff; }
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = () => {
+            const api = new JitsiMeetExternalAPI("8x8.vc", {
+                roomName: "vpaas-magic-cookie-bd0b243e316c44ab8f707a64e1271195/SampleAppRobustLaunchesEmbarkFullTime",
+                parentNode: document.querySelector('#jaas-container'),
+                // Custom configurations matching interface aesthetics with deep space panels
+                configOverwrite: {
+                    darkToolbarBackgroundColor: '#0d081e',
+                    backgroundColor: '#05020e',
+                    defaultRemoteDisplayName: 'Fellow Astronaut',
+                    hideConferenceTimer: false
+                },
+                interfaceConfigOverwrite: {
+                    DEFAULT_BACKGROUND: '#05020e',
+                    DISABLE_VIDEO_BACKGROUND: true
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-  <h1>🧠 Brainrot Storager</h1>
-  <div id="form-section">
-    <input type="text" id="serverLink" placeholder="Enter Roblox Private Server Link"><br>
-    <input type="text" id="username" placeholder="Enter Your Roblox Username"><br>
-    <button onclick="storeInfo()">Store</button>
-  </div>
 
-  <div id="status-section" class="status" style="display:none;"></div>
-  <div id="actions-section" style="display:none;">
-    <button onclick="updateInfo()">Update Info</button>
-    <button onclick="unstoreInfo()">Unstore</button>
-  </div>
+    <!-- Space Theme Decorators -->
+    <div class="starfield"></div>
+    <div class="nebula-pink"></div>
+    <div class="nebula-blue"></div>
 
-  <script>
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1429933272770678824/HKS-kQ_0jZCMqF3esQW5-aYFhxdMbbMiqIR06RJSGYSUNTE62EA9DF0MMWcC6zI0GDSi";
+    <!-- Application Top Navbar Header -->
+    <header class="glide-navbar">
+        <div class="brand-container">
+            <div class="brand-orb"></div>
+            <div class="brand-name">Glide</div>
+        </div>
+        <div class="space-status">
+            <div class="status-dot"></div>
+            Orbit Connection Established
+        </div>
+    </header>
 
-    window.onload = function() {
-      const saved = localStorage.getItem("brainrotData");
-      if (saved) {
-        const data = JSON.parse(saved);
-        document.getElementById("serverLink").value = data.serverLink;
-        document.getElementById("username").value = data.username;
-        document.getElementById("form-section").style.display = "none";
-        document.getElementById("actions-section").style.display = "block";
-        document.getElementById("status-section").style.display = "block";
-        document.getElementById("status-section").innerText = "✅ Info stored.\nBot will be joining in 5 minutes or less.\nIf it doesn't work, try again later.";
-      }
-    };
+    <!-- Embedded Video Viewport Framework Area -->
+    <main class="workspace-main">
+        <div id="jaas-container"></div>
+    </main>
 
-    function storeInfo() {
-      const serverLink = document.getElementById("serverLink").value;
-      const username = document.getElementById("username").value;
-
-      if (!serverLink || !username) {
-        alert("Please fill out both fields.");
-        return;
-      }
-
-      const payload = {
-        content: `🧠 Brainrot Submission\n🔗 Server: ${serverLink}\n👤 User: ${username}`
-      };
-
-      fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(() => {
-        localStorage.setItem("brainrotData", JSON.stringify({ serverLink, username }));
-        document.getElementById("form-section").style.display = "none";
-        document.getElementById("actions-section").style.display = "block";
-        document.getElementById("status-section").style.display = "block";
-        document.getElementById("status-section").innerText = "✅ Info stored.\nBot will be joining in 5 minutes or less.\nIf it doesn't work, try again later.";
-      });
-    }
-
-    function updateInfo() {
-      localStorage.removeItem("brainrotData");
-      document.getElementById("form-section").style.display = "block";
-      document.getElementById("actions-section").style.display = "none";
-      document.getElementById("status-section").style.display = "none";
-    }
-
-    function unstoreInfo() {
-      const saved = localStorage.getItem("brainrotData");
-      if (saved) {
-        const data = JSON.parse(saved);
-        const payload = {
-          content: `🧠 Brainrot Unstore\n🔗 Server: ${data.serverLink}\n👤 User: ${data.username}\n⚠️ User has unstored their info.`
-        };
-
-        fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        document.getElementById("status-section").style.display = "block";
-        document.getElementById("status-section").innerText = "🤖 Bot will be joining within 5 minutes.\nIf it takes longer, try again later.";
-      }
-    }
-  </script>
 </body>
 </html>
